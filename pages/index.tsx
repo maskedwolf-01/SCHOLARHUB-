@@ -1,4 +1,3 @@
-// pages/index.tsx
 import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -15,8 +14,17 @@ export default function Home() {
           Welcome to ScholarHub
         </h1>
         <p className="text-center text-gray-300 mb-12">
-          Your portal to computing courses, tutorials, library resources, and messaging at FUOYE.
+          Your portal to computing courses, tutorials, and library resources at FUOYE.
         </p>
+
+        {/* Example Image */}
+        <div className="flex justify-center mb-12">
+          <img
+            src="/fuoye-faculty.jpg"
+            alt="FUOYE Faculty"
+            className="rounded-lg shadow-md w-full max-w-md"
+          />
+        </div>
 
         {/* Courses Section */}
         <section className="mb-12">
@@ -51,25 +59,14 @@ export default function Home() {
           <p className="text-gray-300">
             Access your computing textbooks, research papers, and notes here.
           </p>
-          {/* Links or embedded resources will be added later */}
         </section>
 
         {/* Tutorials Section */}
         <section className="mb-12">
           <h2 className="text-3xl font-semibold mb-6 neon-text">Tutorials</h2>
           <p className="text-gray-300">
-            Find tutorials from various sources like YouTube, Wikipedia, GitHub, and online guides.
+            Find tutorials from various sources like YouTube, Wikipedia, and online guides.
           </p>
-          {/* YouTube, Wikipedia, GitHub API integration will be added later */}
-        </section>
-
-        {/* Messaging Section (Placeholder) */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-semibold mb-6 neon-text">Messaging</h2>
-          <p className="text-gray-300">
-            Communicate with other users here. Messaging feature will be implemented soon.
-          </p>
-          {/* Messaging UI and API integration to be added later */}
         </section>
       </main>
 
