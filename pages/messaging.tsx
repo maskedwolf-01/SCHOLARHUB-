@@ -1,70 +1,82 @@
 // pages/messaging.tsx
-import React, { useEffect, useState } from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import { db } from "../lib/firebase";
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "firebase/firestore";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import {
+  collection,
+  addDoc,
+  query,
+  orderBy,
+  onSnapshot,
+  serverTimestamp,
+} from "firebase/firestore";
 
 export default function Messaging() {
+  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<any[]>([]);
-  const [newMessage, setNewMessage] = useState("");
 
-  // Load messages in real-time
   useEffect(() => {
     const q = query(collection(db, "messages"), orderBy("timestamp", "asc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      setMessages(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      setMessages(
+        snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+      );
     });
-    return unsubscribe;
+    return () => unsubscribe();
   }, []);
 
-  // Send a new message
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim()) return;
+    if (!message.trim()) return;
 
     await addDoc(collection(db, "messages"), {
-      text: newMessage,
+      text: message,
       timestamp: serverTimestamp(),
-      sender: "Anonymous", // later you’ll replace this with Google user name
     });
-    setNewMessage("");
+
+    setMessage("");
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#0f0f15] to-[#0a0a1f] text-white">
-      <Navbar />
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#0f0f15] to-[#0a0a1f] text-white p-4">
+      <h1 className="text-3xl font-bold mb-6 text-center text-[#00ffea]">Messaging</h1>
 
-      <main className="flex-grow px-4 py-12 max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-center">Messaging Room</h1>
-
-        <div className="bg-[#11111a] rounded-lg p-4 h-[60vh] overflow-y-auto mb-4 border border-gray-700">
-          {messages.map((msg) => (
-            <div key={msg.id} className="mb-2">
-              <span className="text-[#00ffea] font-semibold">{msg.sender}: </span>
-              <span>{msg.text}</span>
-            </div>
-          ))}
-        </div>
-
-        <form onSubmit={sendMessage} className="flex gap-2">
-          <input
-            type="text"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Type your message..."
-            className="flex-grow p-2 rounded bg-[#1a1a22] border border-gray-700 focus:outline-none"
-          />
-          <button
-            type="submit"
-            className="bg-[#00ffea] text-black px-4 py-2 rounded hover:bg-[#00e6d1] transition"
+      <div className="flex-1 overflow-y-auto mb-4 p-4 bg-[#111118] rounded-md shadow-md">
+        {messages.length === 0 && (
+          <p className="text-center text-gray-400">No messages yet...</p>
+        )}
+        {messages.map((msg) => (
+          <div
+            key={msg.id}
+            className="mb-3 p-3 bg-[#1a1a2e] rounded-lg shadow"
           >
-            Send
-          </button>
-        </form>
-      </main>
+            <p>{msg.text}</p>
+          </div>
+        ))}
+      </div>
 
-      <Footer />
+      <form
+        onSubmit={sendMessage}
+        className="flex space-x-2 border-t border-gray-700 pt-3"
+      >
+        <input
+          type="text"
+          placeholder="Type your message..."
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          className="flex-1 p-3 rounded-md text-black"
+        />
+        <button
+          type="submit"
+          className="bg-[#00ffea] text-[#0f0f15] px-5 py-3 rounded-md font-semibold hover:bg-[#00d8c4] transition"
+        >
+          Send
+        </button>
+      </form>
     </div>
   );
-                             }
+        }
