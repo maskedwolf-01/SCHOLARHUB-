@@ -11,8 +11,10 @@ import {
   onSnapshot,
   serverTimestamp,
 } from "firebase/firestore";
+import { useSession } from "next-auth/react";
 
 export default function Messaging() {
+  const { data: session } = useSession();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<any[]>([]);
 
@@ -31,19 +33,32 @@ export default function Messaging() {
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!message.trim()) return;
+    if (!message.trim() || !session) return;
 
     await addDoc(collection(db, "messages"), {
       text: message,
+      user: session.user?.name || "Anonymous",
       timestamp: serverTimestamp(),
     });
 
     setMessage("");
   };
 
+  if (!session) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0f0f15] to-[#0a0a1f] text-white">
+        <p className="text-gray-400 text-center text-lg">
+          Please log in to access messages.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#0f0f15] to-[#0a0a1f] text-white p-4">
-      <h1 className="text-3xl font-bold mb-6 text-center text-[#00ffea]">Messaging</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center text-[#00ffea]">
+        Messaging
+      </h1>
 
       <div className="flex-1 overflow-y-auto mb-4 p-4 bg-[#111118] rounded-md shadow-md">
         {messages.length === 0 && (
@@ -54,6 +69,7 @@ export default function Messaging() {
             key={msg.id}
             className="mb-3 p-3 bg-[#1a1a2e] rounded-lg shadow"
           >
+            <p className="font-semibold text-[#00ffea]">{msg.user}</p>
             <p>{msg.text}</p>
           </div>
         ))}
@@ -79,4 +95,4 @@ export default function Messaging() {
       </form>
     </div>
   );
-        }
+}
