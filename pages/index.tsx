@@ -1,3 +1,4 @@
+// pages/index.tsx
 import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -17,12 +18,12 @@ export default function Home() {
           Your portal to computing courses, tutorials, and library resources at FUOYE.
         </p>
 
-        {/* Example Image */}
+        {/* Hero Image */}
         <div className="flex justify-center mb-12">
           <img
             src="/fuoye-faculty.jpg"
             alt="FUOYE Faculty"
-            className="rounded-lg shadow-md w-full max-w-md"
+            className="rounded-lg shadow-lg max-w-full h-auto"
           />
         </div>
 
