@@ -1,5 +1,7 @@
 // pages/tutorials.tsx
 import { useState } from "react";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export default function Tutorials() {
   const [query, setQuery] = useState("");
@@ -9,19 +11,19 @@ export default function Tutorials() {
   const [mdnResults, setMdnResults] = useState<any[]>([]);
   const [soResults, setSoResults] = useState<any[]>([]);
 
-  const YOUTUBE_API_KEY = "AIzaSyA5jVJbDg4h9qOBHjGk1ANLkiEJF_vPvg4";
+  const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 
   const handleSearch = async () => {
     if (!query) return;
 
-    // 1. Wikipedia API
+    // 1. Wikipedia
     const wikiRes = await fetch(
       `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`
     );
     const wikiData = await wikiRes.json();
     setWikiResult(wikiData.extract || "No Wikipedia summary found.");
 
-    // 2. YouTube API
+    // 2. YouTube
     const youtubeRes = await fetch(
       `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(
         query
@@ -30,7 +32,7 @@ export default function Tutorials() {
     const youtubeData = await youtubeRes.json();
     setYoutubeResults(youtubeData.items || []);
 
-    // 3. GitHub API
+    // 3. GitHub
     const githubRes = await fetch(
       `https://api.github.com/search/repositories?q=${encodeURIComponent(
         query
@@ -39,14 +41,14 @@ export default function Tutorials() {
     const githubData = await githubRes.json();
     setGithubResults(githubData.items || []);
 
-    // 4. MDN Docs Search
+    // 4. MDN Docs
     const mdnRes = await fetch(
       `https://developer.mozilla.org/api/v1/search?q=${encodeURIComponent(query)}&locale=en-US`
     );
     const mdnData = await mdnRes.json();
     setMdnResults(mdnData.documents || []);
 
-    // 5. Stack Overflow Search
+    // 5. Stack Overflow
     const soRes = await fetch(
       `https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=relevance&q=${encodeURIComponent(
         query
@@ -58,6 +60,7 @@ export default function Tutorials() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0f0f15] to-[#0a0a1f] text-white p-4 md:p-10">
+      <Navbar />
       <h1 className="text-4xl font-bold mb-6 text-[#00ffea]">Tutorials Hub</h1>
 
       {/* Search Bar */}
@@ -77,7 +80,7 @@ export default function Tutorials() {
         </button>
       </div>
 
-      {/* Wikipedia Section */}
+      {/* Wikipedia */}
       {wikiResult && (
         <div className="mb-6 p-4 bg-[#111118] rounded-md shadow-md">
           <h2 className="text-2xl font-bold mb-2 text-[#00ffea]">Wikipedia</h2>
@@ -85,7 +88,7 @@ export default function Tutorials() {
         </div>
       )}
 
-      {/* YouTube Section */}
+      {/* YouTube */}
       {youtubeResults.length > 0 && (
         <div className="mb-6 p-4 bg-[#111118] rounded-md shadow-md">
           <h2 className="text-2xl font-bold mb-4 text-[#ff5555]">YouTube Videos</h2>
@@ -109,7 +112,7 @@ export default function Tutorials() {
         </div>
       )}
 
-      {/* GitHub Section */}
+      {/* GitHub */}
       {githubResults.length > 0 && (
         <div className="mb-6 p-4 bg-[#111118] rounded-md shadow-md">
           <h2 className="text-2xl font-bold mb-4 text-[#f0ad4e]">GitHub Repositories</h2>
@@ -129,7 +132,7 @@ export default function Tutorials() {
         </div>
       )}
 
-      {/* MDN Docs Section */}
+      {/* MDN */}
       {mdnResults.length > 0 && (
         <div className="mb-6 p-4 bg-[#111118] rounded-md shadow-md">
           <h2 className="text-2xl font-bold mb-4 text-[#00aaff]">MDN Docs</h2>
@@ -149,7 +152,7 @@ export default function Tutorials() {
         </div>
       )}
 
-      {/* Stack Overflow Section */}
+      {/* Stack Overflow */}
       {soResults.length > 0 && (
         <div className="mb-6 p-4 bg-[#111118] rounded-md shadow-md">
           <h2 className="text-2xl font-bold mb-4 text-[#ff9900]">Stack Overflow</h2>
@@ -168,6 +171,8 @@ export default function Tutorials() {
           </ul>
         </div>
       )}
+
+      <Footer />
     </div>
   );
-}
+          }
