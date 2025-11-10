@@ -1,2 +1,2 @@
 # scholarhub
-FUOYE Faculty of Computing --GPA, CGPA and Digital Library 
+FUOYE The Faculty of Computing --GPA, CGPA and Digital Library 
