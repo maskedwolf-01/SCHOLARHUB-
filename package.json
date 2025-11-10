@@ -1,6 +1,6 @@
 {
   "name": "scholarhub",
-  "version": "1.0.3",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,16 +9,10 @@
   },
   "dependencies": {
     "next": "14.2.0",
+    "next-auth": "4.22.1",
+    "@next-auth/firebase-adapter": "1.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "next-auth": "^5.0.0-beta.22",
-    "@next-auth/firebase-adapter": "^1.1.4",
-    "firebase": "^10.4.0",
-    "firebase-admin": "^12.0.0"
-  },
-  "devDependencies": {
-    "typescript": "^5.6.3",
-    "@types/react": "^18.3.11",
-    "@types/node": "^20.14.12"
+    "firebase": "^10.4.0"
   }
 }
