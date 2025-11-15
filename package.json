@@ -8,7 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "next": "14.2.0",
+    "next": "13.5.9",   // compatible with next-auth@4.22.1
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "firebase": "^10.8.0",
