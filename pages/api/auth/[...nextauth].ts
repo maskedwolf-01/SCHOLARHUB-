@@ -1,11 +1,11 @@
-import NextAuth from "@auth/core";
-import Google from "@auth/core/providers/google";
+import NextAuth from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
 import { FirestoreAdapter } from "@auth/firebase-adapter";
 import { cert } from "firebase-admin/app";
 
 export default NextAuth({
   providers: [
-    Google({
+    GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
@@ -20,16 +20,4 @@ export default NextAuth({
   }),
 
   secret: process.env.NEXTAUTH_SECRET,
-  pages: { signIn: "/login" },
-
-  session: { strategy: "jwt" },
-
-  callbacks: {
-    async session({ session, token }) {
-      if (token) {
-        (session as any).user.id = token.sub;
-      }
-      return session;
-    },
-  },
 });
