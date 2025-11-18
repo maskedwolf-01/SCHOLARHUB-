@@ -14,10 +14,10 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase (prevent reinitialization during Next.js hot reload)
+// Initialize Firebase (avoid reinitializing during Next.js hot reload)
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-// Export Firestore and Auth for use in components
+// Export Firestore and Auth
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 
