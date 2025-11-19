@@ -1,9 +1,24 @@
 // pages/courses.tsx
+"use client";
+
 import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { useSession } from "next-auth/react";
 
 export default function Courses() {
+  const { data: session } = useSession();
+
+  if (!session) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0f0f15] to-[#0a0a1f] text-white">
+        <p className="text-gray-400 text-center text-lg">
+          Please log in to view courses.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#0f0f15] to-[#0a0a1f] text-white">
       <Navbar />
