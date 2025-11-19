@@ -1,9 +1,11 @@
-// pages/index.tsx
 import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function Home() {
+  const { data: session } = useSession();
+
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#0f0f15] to-[#0a0a1f] text-white">
       {/* Navbar */}
@@ -17,6 +19,28 @@ export default function Home() {
         <p className="text-center text-gray-300 mb-12">
           Your portal to computing courses, tutorials, and library resources at FUOYE.
         </p>
+
+        {/* Google Sign-In Section */}
+        <div className="text-center mb-12">
+          {session ? (
+            <div>
+              <p>Signed in as {session.user?.email}</p>
+              <button
+                onClick={() => signOut()}
+                className="mt-2 px-4 py-2 bg-[#00ffea] text-black rounded hover:bg-[#00d8cc]"
+              >
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => signIn("google")}
+              className="px-4 py-2 bg-[#00ffea] text-black rounded hover:bg-[#00d8cc]"
+            >
+              Sign In with Google
+            </button>
+          )}
+        </div>
 
         {/* Hero Image */}
         <div className="flex justify-center mb-12">
