@@ -12,6 +12,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { useSession } from "next-auth/react";
+import { FaUser, FaPaperPlane } from "react-icons/fa";
 
 export default function Messaging() {
   const { data: session } = useSession();
@@ -67,9 +68,11 @@ export default function Messaging() {
         {messages.map((msg) => (
           <div
             key={msg.id}
-            className="mb-3 p-3 bg-[#1a1a2e] rounded-lg shadow"
+            className="mb-3 p-3 bg-[#1a1a2e] rounded-lg shadow flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2"
           >
-            <p className="font-semibold text-[#00ffea]">{msg.user}</p>
+            <p className="flex items-center gap-2 font-semibold text-[#00ffea]">
+              <FaUser /> {msg.user}
+            </p>
             <p>{msg.text}</p>
           </div>
         ))}
@@ -77,7 +80,7 @@ export default function Messaging() {
 
       <form
         onSubmit={sendMessage}
-        className="flex space-x-2 border-t border-gray-700 pt-3"
+        className="flex flex-col sm:flex-row gap-2 border-t border-gray-700 pt-3"
       >
         <input
           type="text"
@@ -88,11 +91,11 @@ export default function Messaging() {
         />
         <button
           type="submit"
-          className="bg-[#00ffea] text-[#0f0f15] px-5 py-3 rounded-md font-semibold hover:bg-[#00d8c4] transition"
+          className="flex items-center gap-2 justify-center bg-[#00ffea] text-[#0f0f15] px-5 py-3 rounded-md font-semibold hover:bg-[#00d8c4] transition"
         >
-          Send
+          <FaPaperPlane /> Send
         </button>
       </form>
     </div>
   );
-}
+      }
