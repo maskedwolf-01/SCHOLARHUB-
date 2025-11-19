@@ -3,7 +3,7 @@ import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
-// Firebase configuration (hardcoded)
+// ----- Hardcoded Firebase config -----
 const firebaseConfig = {
   apiKey: "AIzaSyDZH02DIDzS69wxosXqsLCX_mFD3fpOCxA",
   authDomain: "scholarhub-477707.firebaseapp.com",
@@ -14,11 +14,9 @@ const firebaseConfig = {
   measurementId: "G-SPT6Z410CF",
 };
 
-// Initialize Firebase (avoid double-init)
+// Initialize Firebase (prevent double initialization)
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-// Export Firestore and Auth
 export const db = getFirestore(app);
 export const auth = getAuth(app);
-
 export default app;
