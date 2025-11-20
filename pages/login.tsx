@@ -1,4 +1,6 @@
 // pages/login.tsx
+"use client";
+
 import React from "react";
 import { signIn } from "next-auth/react";
 import Navbar from "../components/Navbar";
