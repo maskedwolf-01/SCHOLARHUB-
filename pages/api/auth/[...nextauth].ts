@@ -1,25 +1,6 @@
 // pages/api/auth/[...nextauth].ts
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { FirestoreAdapter } from "@next-auth/firebase-adapter";
-import { cert, getApps, initializeApp } from "firebase-admin/app";
-
-// Initialize Firebase Admin SDK only once
-if (!getApps().length) {
-  initializeApp({
-    credential: cert({
-      projectId: "scholarhub-477707",
-      clientEmail: "firebase-adminsdk-fbsvc@scholarhub-477707.iam.gserviceaccount.com",
-      privateKey: `-----BEGIN PRIVATE KEY-----
-MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCgerXADJm+dMW2
-RkbVn0Ot4IOFgTdaqci2BTg8w39zVkiQovE7mTWbxaoX++eGXi9bewsZYJmhEuiX
-...
-L+r38oHPPk7fKPDs+L6Z7ujL4YQnl67SeCBxoZrBAoGAfhvP83xTAj+yJckXGgur
-...
------END PRIVATE KEY-----`,
-    }),
-  });
-}
 
 export default NextAuth({
   providers: [
@@ -29,12 +10,20 @@ export default NextAuth({
     }),
   ],
 
-  adapter: FirestoreAdapter(),
-
   secret: "jsjekemejoms8393ib39sne8o2ne8ek3n",
 
   session: {
     strategy: "jwt",
+  },
+
+  callbacks: {
+    async jwt({ token }) {
+      return token;
+    },
+    async session({ session, token }) {
+      session.userId = token.sub;
+      return session;
+    },
   },
 
   debug: true,
