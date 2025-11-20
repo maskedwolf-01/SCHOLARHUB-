@@ -1,26 +1,12 @@
 // pages/signup.tsx
-import React, { useState, useEffect } from "react";
+"use client";
+
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { getAuth, signInWithPopup, GoogleAuthProvider, User } from "firebase/auth";
-import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
-import { initializeApp } from "firebase/app";
-
-// ----- Hardcoded Firebase config -----
-const firebaseConfig = {
-  apiKey: "AIzaSyDZH02DIDzS69wxosXqsLCX_mFD3fpOCxA",
-  authDomain: "scholarhub-477707.firebaseapp.com",
-  projectId: "scholarhub-477707",
-  storageBucket: "scholarhub-477707.appspot.com",
-  messagingSenderId: "503892607031",
-  appId: "1:503892607031:web:1b42676137730d70b83fb2",
-  measurementId: "G-SPT6Z410CF",
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+import { auth, db } from "../lib/firebase";
+import { GoogleAuthProvider, signInWithPopup, User } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function Signup() {
   const [user, setUser] = useState<User | null>(null);
@@ -29,7 +15,7 @@ export default function Signup() {
   const [level, setLevel] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Sign in with Google
+  // Google Sign-in
   const handleGoogleSignIn = async () => {
     try {
       const provider = new GoogleAuthProvider();
@@ -41,15 +27,14 @@ export default function Signup() {
     }
   };
 
-  // Save additional info to Firestore
+  // Save extra user data
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return alert("You must sign in with Google first.");
 
     setLoading(true);
     try {
-      const userRef = doc(db, "users", user.uid);
-      await setDoc(userRef, {
+      await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
         email: user.email,
         fullName,
@@ -57,11 +42,13 @@ export default function Signup() {
         level,
         createdAt: new Date(),
       });
+
       alert("Signup complete!");
     } catch (err) {
       console.error("Firestore save error:", err);
       alert("Failed to save data.");
     }
+
     setLoading(false);
   };
 
@@ -83,6 +70,7 @@ export default function Signup() {
         ) : (
           <div className="w-full max-w-md p-8 bg-[#111118] rounded-lg shadow-lg">
             <h1 className="text-3xl font-bold text-center mb-4 neon-text">Complete Signup</h1>
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
@@ -92,6 +80,7 @@ export default function Signup() {
                 className="w-full p-3 rounded-md text-black"
                 required
               />
+
               <input
                 type="text"
                 placeholder="Department (e.g., Computer Science)"
@@ -100,6 +89,7 @@ export default function Signup() {
                 className="w-full p-3 rounded-md text-black"
                 required
               />
+
               <input
                 type="text"
                 placeholder="Level (e.g., 200, 300)"
@@ -124,4 +114,4 @@ export default function Signup() {
       <Footer />
     </div>
   );
-  }
+    }
