@@ -5,26 +5,30 @@ import GoogleProvider from "next-auth/providers/google";
 export default NextAuth({
   providers: [
     GoogleProvider({
-      clientId: "503892607031-qvu1qm120sadjqt70eomjninkducalmr.apps.googleusercontent.com",
-      clientSecret: "GOCSPX-XrJQVj6OhUz9Rewkd9nE6OTTRA4",
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
 
-  secret: "jsjekemejoms8393ib39sne8o2ne8ek3n",
+  secret: process.env.NEXTAUTH_SECRET,
 
   session: {
     strategy: "jwt",
   },
 
   callbacks: {
-    async jwt({ token }) {
+    async jwt({ token, account }) {
+      if (account?.provider === "google") {
+        token.id = token.sub;
+      }
       return token;
     },
+
     async session({ session, token }) {
-      session.userId = token.sub;
+      if (session.user && token.id) {
+        session.user.id = token.id;
+      }
       return session;
     },
   },
-
-  debug: true,
 });
