@@ -1,4 +1,3 @@
-// pages/api/auth/[...nextauth].ts
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -10,25 +9,27 @@ export default NextAuth({
     }),
   ],
 
-  secret: process.env.NEXTAUTH_SECRET,
-
   session: {
     strategy: "jwt",
   },
 
   callbacks: {
     async jwt({ token, account }) {
-      if (account?.provider === "google") {
-        token.id = token.sub;
+      // When user logs in, store their Google ID (sub)
+      if (account) {
+        token.sub = token.sub; 
       }
       return token;
     },
 
     async session({ session, token }) {
-      if (session.user && token.id) {
-        session.user.id = token.id;
+      // Attach user ID to session object
+      if (session.user && token.sub) {
+        session.user.id = token.sub as string;
       }
       return session;
     },
   },
+
+  secret: process.env.NEXTAUTH_SECRET!,
 });
