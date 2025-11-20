@@ -11,6 +11,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#0f0f15] to-[#0a0a1f] text-white">
+
       {/* Navbar */}
       <Navbar />
 
@@ -19,6 +20,7 @@ export default function Home() {
         <h1 className="text-5xl font-bold mb-4 neon-text text-center">
           Welcome to ScholarHub
         </h1>
+
         <p className="text-center text-gray-300 mb-8">
           Your portal to computing courses, tutorials, and library resources at FUOYE.
         </p>
